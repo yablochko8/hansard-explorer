@@ -1,48 +1,36 @@
 import { useState } from 'react'
 import './App.css'
 import { getSitting } from './serverCalls'
+import { DatePicker } from './components/DatePicker'
 
 
 
 function App() {
-  const [day, setDay] = useState(16)
-  const [month, setMonth] = useState(4)
-  const [year, setYear] = useState(2002)
 
-  const [sitting, setSitting] = useState(null)
-
-  const handleDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDay(parseInt(event.target.value));
-  };
-
-  const handleMonthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMonth(parseInt(event.target.value));
-  };
-
-  const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setYear(parseInt(event.target.value));
-  };
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date('2002-04-16'))
+  const [sitting, setSitting] = useState<any>(null)
 
   const handleSubmit = () => {
-    getSitting({ year, month, day }).then((sitting) => {
-      setSitting(sitting);
-    });
+    console.log("submitted!")
+    if (selectedDate) {
+      getSitting(selectedDate).then((sitting) => {
+        setSitting(sitting);
+      });
+    }
+    else {
+      console.log("no date selected")
+    }
   }
 
+  console.log("selectedDate", selectedDate)
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <input type="number" value={day} onChange={handleDayChange} />
-      <input type="number" value={month} onChange={handleMonthChange} />
-      <input type="number" value={year} onChange={handleYearChange} />
+      <DatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
       <button onClick={handleSubmit}>Submit</button>
 
       {sitting && (
         <div>
-          {Object.keys(sitting).map((key) => (
-            <li key={key}>
-              {key}: {JSON.stringify(sitting[key])}
-            </li>
-          ))}
+          Sitting found with length {sitting.length}
         </div>
       )}
     </div>

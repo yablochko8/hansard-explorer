@@ -1,11 +1,5 @@
 const SERVER_URL = "https://api.parliament.uk/historic-hansard";
 
-type getSittingProps = {
-  year: number;
-  month: number;
-  day: number;
-};
-
 const monthToAlpha = (month: number) => {
   const alpha = [
     "jan",
@@ -21,11 +15,14 @@ const monthToAlpha = (month: number) => {
     "nov",
     "dec",
   ];
-  return alpha[month - 1];
+  return alpha[month];
 };
 
-export const getSitting = async ({ year, month, day }: getSittingProps) => {
+export const getSitting = async (date: Date) => {
   // Example format: https://api.parliament.uk/historic-hansard/sittings/2002/apr/16.js
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
   const alphaMonth = monthToAlpha(month);
 
   const fullPath = `${SERVER_URL}/sittings/${year}/${alphaMonth}/${day}.js`;
