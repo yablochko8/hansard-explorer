@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { getSitting } from './serverCalls'
 import { DatePicker } from './components/DatePicker'
+import { JsonViewer } from './components/JsonViewer'
 
 
 
@@ -28,13 +29,21 @@ function App() {
 
   console.log("selectedDate", selectedDate)
   return (
-    <div className="flex flex-col items-center justify-start h-screen">
+    <div className="flex flex-col items-center justify-start h-screen w-screen p-4">
       <DatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
       <button onClick={handleSubmit}>Fetch</button>
 
       {sitting && (
+        <>
+          <div>
+            Sitting (for {sittingDate?.toLocaleDateString()}) found with length {sitting.length}
+          </div>
+          <JsonViewer data={sitting} />
+        </>
+      )}
+      {sittingDate && !sitting && (
         <div>
-          Sitting (for {sittingDate?.toLocaleDateString()}) found with length {sitting.length}
+          No sitting found for {sittingDate?.toLocaleDateString()}
         </div>
       )}
     </div>

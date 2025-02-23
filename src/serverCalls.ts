@@ -33,7 +33,7 @@ export const getSitting = async (date: Date) => {
   const response = await fetch(fullPath);
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    return null;
   }
 
   const data = await response.json();
