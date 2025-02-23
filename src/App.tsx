@@ -14,12 +14,14 @@ function App() {
 
   const [sitting, setSitting] = useState<any>(null)
 
-  const handleSubmit = () => {
+  const handleSubmit = (date?: Date) => {
+
+    const submissionDate = date || selectedDate;
     console.log("submitted!")
-    if (selectedDate) {
-      getSitting(selectedDate).then((sitting) => {
+    if (submissionDate) {
+      getSitting(submissionDate).then((sitting) => {
         setSitting(sitting);
-        setSittingDate(selectedDate);
+        setSittingDate(submissionDate);
       });
     }
     else {
@@ -27,23 +29,28 @@ function App() {
     }
   }
 
+  const changeDateAndSubmit = (date: Date) => {
+    setSelectedDate(date);
+    handleSubmit(date);
+  }
+
   console.log("selectedDate", selectedDate)
   return (
     <div className="flex flex-col items-center justify-start h-screen w-screen p-4">
-      <DatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
-      <button onClick={handleSubmit}>Fetch</button>
+      <DatePicker selectedDate={selectedDate} onDateChange={changeDateAndSubmit} />
+      {/* <button onClick={handleSubmit}>Fetch</button> */}
 
       {sitting && (
         <>
           <div>
-            Sitting (for {sittingDate?.toLocaleDateString()}) found with length {sitting.length}
+            API response for {sittingDate?.toLocaleDateString()}
           </div>
           <JsonViewer data={sitting} />
         </>
       )}
       {sittingDate && !sitting && (
         <div>
-          No sitting found for {sittingDate?.toLocaleDateString()}
+          No response for {sittingDate?.toLocaleDateString()}
         </div>
       )}
     </div>
